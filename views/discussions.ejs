@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Discussions</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
+  <link href="https://fonts.googleapis.com/css?family=McLaren|Raleway|Grand+Hotel" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body class="library">
+
+  <!-- Navigation Bar -->
+  <nav class="z-depth-0">
+    <div class="nav-wrapper">
+    <a href="/library" class="brand-logo"><h1>Dewey.</h1></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/library" id="libraryPage">My Library</a></li>
+        <li><a href="/groups">Groups</a></li>
+        <li><a href="/discover">Discover</a></li>
+        <li><a href="/logout" id="logout">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- Container to show existing discussions -->
+  <div class="container">
+    <div class="row">
+      <div class="col s10 offset-s1">
+        <div class="discussions">
+          <h2><%= user.name %>'s Discussions</h2>
+          
+           <!-- Generate List of Discussions here and ability to open individual chats -->
+          <div>
+            <ul class="collapsible" data-collapsible="accordion" id="discussionList"></ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Structure -->
+  <div id="chat" class="modal">
+    <div class="modal-content">
+      <!-- Chat Display Setup -->
+      <div id="chats">
+        <div id="chat-messages"></div>
+        <!-- <div id="chat-bar"></div> -->
+      </div>
+    </div>
+    <!-- Chat Input Here -->
+    <div class="modal-footer">
+      <input type="text" id="chat-input" placeholder="Add to the conversation!">
+      <a class="modal-action btn-flat" id="chat-send">Send</a>
+    </div>
+  </div>
+
+  <!-- Custom Script -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/discussion.js"></script>
+
+</body>
+</html>

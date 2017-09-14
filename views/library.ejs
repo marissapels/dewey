@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dewey</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|PT+Mono|Saira+Semi+Condensed|Titillium+Web" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body class="library">
+
+
+  <!-- Navigation Bar -->
+<nav class="z-depth-0">
+  <div class="nav-wrapper">
+  <a href="/library" class="brand-logo"><h1>Dewey.</h1></a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a href="/library" id="libraryPage">My Library</a></li>
+      <li><a href="/groups">Groups</a></li>
+      <li><a href="/discover">Discover</a></li>
+      <li><a href="/logout" id="logout">Log Out</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Container to create and show books -->
+
+<div class="container">
+  <div class="row">
+    <div class="col s3 about">
+      <div class="row">
+        <img id="profilePicture" src="../img/placeholder.png" class="circle responsive-img">
+      </div>
+      <div class="row personalInfo">
+        <h2 id="personalName"><%= user.name %></h2>
+        <p id="personalFavorite">Favorite Book: The Power of One</p>
+        <p id="personalCurrent">Currently Reading: You Don't Know JS</p>
+        <a id="editProfile">Edit</a>
+      </div>
+    </div>
+    <!-- <div class="col s1"></div> -->
+    <div class="col s9 bookList">
+    <h2><%= user.name %>'s Bookshelf</h2>
+      <a class="btn modal-trigger" href="#modal1" id="modalButton">Add a Book</a>
+      <div id="tableLibrary"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col s4">
+      <div class="bookList">
+        <h2><%= user.name %>'s Bookshelf</h2>
+        
+        <a class="btn" id="viewBooks">View Books</a> -->
+        <!-- Modal Trigger -->
+        <!-- <a class="btn modal-trigger" href="#modal1" id="modalButton">Add a Book</a> -->
+
+        <!-- Append Book Info -->
+     <!--    <table id="tableLibrary"></table>
+      </div>
+    </div>
+    <div class="col s8">
+      <div class="bookInfo">
+        <h2>Book Report</h2> 
+        <p id="chooseTitle"></p>
+        <p id="chooseAuthor"></p>
+        <p id="chooseRate"></p>
+        <p id="chooseSummary"></p>
+        <p id="chooseComments"></p>
+        <img src="" id="chooseImage">
+      </div>
+    </div>
+  </div>
+</div>
+ -->
+
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <form>
+        <label for="title">Title</label>
+        <input type="text" id="title">
+        <label for="author">Author</label>
+        <input type="text" id="author">       
+        <label for="comments">Comments</label>
+        <input type="text" id="comments">
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close btn-flat"  id="bookSubmit">Add</a>
+    </div>
+  </div>
+  
+  <!-- Modal to view book info -->
+    <div id="modalBookInfo" class="modal">
+    <div class="modal-content">
+      <p id="chooseTitle">Title</p>
+      <p id="chooseAuthor">Author</p>
+      <p id="chooseRating">Rating</p>
+      <p id="chooseSummary">Summary</p>      
+      <p id="chooseComments">Comments</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close btn-flat"  id="deleteBook">Remove from Library</a>
+      <a href="#!" class="modal-action modal-close btn-flat"  id="closeInfo">Close</a>
+    </div>
+  </div>
+
+
+  <!-- Custom Script -->
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/library.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Discussions</title>
+    <!-- Latest compiled and minified CSS & JS -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
+    <link href="https://fonts.googleapis.com/css?family=McLaren|Raleway|Grand+Hotel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body class="library">
+
+  <!-- Navigation Bar -->
+  <nav class="z-depth-0">
+    <div class="nav-wrapper">
+    <a href="/library" class="brand-logo"><h1>Dewey.</h1></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/library" id="libraryPage">My Library</a></li>
+        <li><a href="/groups">Groups</a></li>
+        <li><a href="/discover">Discover</a></li>
+        <li><a href="/logout" id="logout">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+
+    <!-- Container to show existing groups -->
+    <div class="container">
+        <div class="row">
+            <div class="col s7">
+                <div class="groups">
+                    <h2><%= user.name %>'s Groups</h2>
+                    <a class="waves-effect waves-light btn" href="#new-group-modal" id="create-group">Create New Group</a>
+                    <a class="waves-effect waves-light btn" href="#groups-modal" id="join-groups">Join A Group</a>
+
+                    <div>
+                        <!-- <table id="groupList"></table> -->
+                        <ul class="collapsible popout" data-collapsible="accordion" id="groupList">
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Generate Discussions here and ability to open individual chats-->
+            <div class="col s5">
+                <div class="discussions">
+                   <h2><%= user.name %>'s Discussions</h2> 
+                   <div class="row showDiscussions">
+                    <div class="col s12 addDiscussion">
+                      <ul class="tabs addTabs">
+                        <li class="tab no-discussion"><a class="active disc-btn" href="#newDiscussion"><i class="tiny material-icons">add</i></a></li>
+                      </ul>
+                      <div class="addChats"></div>
+                    </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- New Group Modal -->
+    <div id="new-group-modal" class="modal">
+        <div class="modal-content">
+            <h4>Create a Group</h4>
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s8">
+                        <i class="material-icons prefix">group_add</i>
+                        <input id="icon_prefix" type="text" class="validate userInp3">
+                        <label for="icon_prefix" id="reset-input">Group Name</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col s12"></div>
+                    </div>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn" id="add-created-group">Create</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Join Groups modal with autocomplete feature -->
+    <div id="groups-modal" class="modal">
+        <div class="modal-content">
+            <h4>Join Groups</h4>
+            <form class="col s12">
+                <div class="row">
+                    <div id="groups">
+                        <!-- users groups are populated here -->
+                    </div>
+                    <br>
+                    <div id="groups"></div>
+                    <div class="chips chips-autocomplete"></div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col s12"></div>
+                    </div>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn" id="groups-modal-close">Close</a>
+                    <a href="#!" class="waves-effect waves-light btn" id="add-groups">Join</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add member modal to groups -->
+    <div id="member-modal" class="modal">
+        <div class="modal-content">
+            <h4>Group Members</h4>
+            <form class="col s12">
+                <div class="row">
+                    <div id="members">
+                        <!-- group members are populated here -->
+                    </div>
+                    <br>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_circle</i>
+                        <input type="text" id="autocomplete-input" class="autocomplete userInp">
+                        <label for="autocomplete-input">Add Member</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="row">
+                        <div class="col s12"></div>
+                    </div>
+                    <a href="#!" class="modal-action modal-close waves-effect waves-light btn">Close</a>
+                    <a href="#!" class="waves-effect waves-light btn" id="add-user">Add</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Script -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/groups.js"></script>
+    <script type="text/javascript" src="js/discussion.js"></script>
+
+
+</body>
+
+</html>

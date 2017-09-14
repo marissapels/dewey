@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dewey</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|PT+Mono|Saira+Semi+Condensed|Titillium+Web" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+</head>
+
+<body class="start">
+<div>
+  <!-- Navigation Bar -->
+  <nav class="z-depth-0 initialNav">
+    <div class="nav-wrapper">
+    <a href="" class="brand-logo"><h1>Dewey.</h1></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      </ul>
+    </div>
+  </nav>
+  
+  <!-- Container to create and show books -->
+  <div class="container">
+    <div class="row">
+      <div class="col s3"></div>
+      <div class="col s6">
+          <div class="login">
+            <h2>Login</h2>
+              <form action="/login" method="post">
+                  <div>
+                      <label>Email:</label>
+                      <input type="text" name="username"/>
+                  </div>
+                  <div>
+                      <label>Password:</label>
+                      <input type="password" name="password"/>
+                  </div>
+                  <div>
+                      <button type="submit">Login</button>
+                  </div>
+              </form>
+              <a href="/signup"><button type="submit">New User</button></a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Custom Script -->
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <!-- <script type="text/javascript" src="js/library.js"></script> -->
+
+</body>
+</html>

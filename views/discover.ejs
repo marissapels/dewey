@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dewey</title>
+  <!-- Latest compiled and minified CSS & JS -->
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata|PT+Mono|Saira+Semi+Condensed|Titillium+Web" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body class="discover">
+<!--   <header>
+    <h1>Dewey</h1>
+  </header> -->
+
+  <!-- Navigation Bar -->
+  <nav class="z-depth-0">
+    <div class="nav-wrapper">
+    <a href="/library" class="brand-logo"><h1>Dewey.</h1></a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/library" id="libraryPage">My Library</a></li>
+        <li><a href="/groups">Groups</a></li>
+        <li><a href="/discover">Discover</a></li>
+        <li><a href="/logout" id="logout">Log Out</a></li>
+      </ul>
+    </div>
+  </nav>
+   
+<!-- Cards Container -->
+
+<div class="container-cards">
+ 
+  <div class="row">
+    <div class="col s10 m5">
+      <div class="card medium">
+        <div class="card-image">
+          <img src="img/cardpic1.jpg">
+          <span class="card-title">Discover New Books</span>
+          
+        </div>
+        <div class="card-content">
+          <p>Find new books that my interest you here.</p>  
+          <div class="search-wrapper-card">
+              <input id="search"> 
+              <a class="btn modal-trigger" href="#modal1" id="findNewBk"><i class="material-icons left">search</i>find</a>
+              <div class="search-results"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="col s10 m5">
+      <div class="card medium">
+        <div class="card-image">
+          <img src="img/cardpic3.jpg">
+          <span class="card-title">Discover Books by Author</span>
+        </div>
+        <div class="card-content">
+          <p>Find books from your favorite author here.</p>
+            <div class="search-wrapper-card">
+            <input id="search"> 
+            <a class="waves-effect waves-light btn" id="findAuthBk"><i class="material-icons left">search</i>find</a>
+            <div class="search-results"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>
+
+  <div class="row">
+    <div class="col s10 m5">
+      <div class="card medium">
+        <div class="card-image">
+          <img src="img/cardpic4.png">
+          <span class="card-title">Discover Best Sellers</span>
+        </div>
+        <div class="card-content">
+          <p>Find a list of top selling books here.</p>
+              <div class="search-wrapper-card">
+              <input id="search"> 
+              <a class="waves-effect waves-light btn" id="findBestList"><i class="material-icons left">search</i>find</a>
+              <div class="search-results"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="col s10 m5">
+      <div class="card medium">
+        <div class="card-image">
+          <img src="img/cardpic5.jpg">
+          <span class="card-title">Discover Recently Reviewed</span>
+        </div>
+        <div class="card-content">
+          <p>Find recently reviewed books here.</p>
+              <div class="search-wrapper-card">
+              <input id="search"> 
+              <a class="waves-effect waves-light btn" id="findReviewed"><i class="material-icons left">search</i>find</a>
+              <div class="search-results"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+   
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Book List</h4>
+      <ul class="collection">
+        <li class="collection-item avatar">
+
+
+          <image src="images/yuna.jpg" alt class="square" id=bookOne>
+          <span class="title" id="ttl"></span>
+          <p id=bookOneInfo>
+
+          </p>
+          </li>
+
+          <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookTwo>
+          <span class="title"></span>
+          <p id=bookTwoInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookThree>
+          <span class="title"></span>
+          <p id=bookThreeInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookFour>
+          <span class="title"></span>
+          <p id=bookFourInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookFive>
+          <span class="title"></span>
+          <p id=bookFiveInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookSix>
+          <span class="title"></span>
+          <p id=bookSixInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookSeven>
+          <span class="title"></span>
+          <p id=bookSixInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookEight>
+          <span class="title"></span>
+          <p id=bookInfo>
+
+          </p>
+          </li>
+                <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookNine>
+          <span class="title"></span>
+          <p id=bookInfo>
+
+          </p>
+          </li>
+          
+          <li class="collection-item avatar">
+          <image src="images/yuna.jpg" alt class="square" id=bookTen>
+          <span class="title"></span>
+          <p id=bookInfo>
+
+          </p>
+          </li>
+ 
+        </ul>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Agree</a>
+    </div>
+  </div>       
+
+  
+
+            
+
+  <!-- Custom Script -->
+   <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/discover.js"></script>
+
+
+</body>
+</html>

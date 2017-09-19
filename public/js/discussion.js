@@ -30,7 +30,13 @@ $(document).on("click", ".disc-btn", function(){
 
   // Render message to page. Update chat on screen when new message detected - ordered by 'time' value
   chatData.orderByChild("time").on("child_added", function(snapshot) {
-    $(".chat-messages").append("<p class=chatMessages><span>"+ snapshot.val().name + "</span>: " + snapshot.val().message + "</p>");
+    // $(".chat-messages").append("<p class=chatMessages><span>"+ snapshot.val().name + "</span>: " + snapshot.val().message + "</p>");
+    if (snapshot.val().name === username) {
+      $(".chat-messages").append("<p class=chatMessages style='text-align:right;'>" + snapshot.val().message + "</p><p class=chatMessages style='font-size:.5em;text-align:right;margin-bottom:5px'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p>");
+    }
+    else {
+      $(".chat-messages").append("<p class='chatMessages chat-name'>" +snapshot.val().name +"</p><p class=chatMessages>"+ snapshot.val().message + "</p><p class=chatMessages style='font-size:.5em;margin-bottom:12px;'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p>");
+    }
     $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight); 
   });
 
@@ -72,6 +78,94 @@ $(document).on("click", ".disc-btn", function(){
   });
 })
 
+
+// On-click event to show Disussions Panel and populate tabs --> Initial load.
+$(document).on("click", ".groupDiscBtn", function(){
+  $(".addTabs").empty();
+  $(".populate-chat").remove();
+  $(".chat-title").empty();
+  var groupId = $(this).attr("group-id");
+  $(".showDiscussions").show();
+
+  $.get("/api/groups/"+groupId+"/discussions", function(discussions){
+    for (var i=0; i<discussions.length; i++){
+      var updateTabs = $("<li>");
+      updateTabs.addClass("tab");
+      updateTabs.append("<a class='disc-btn' href=#chat-"+discussions[i].id+" data-key=chat"+discussions[i].id
+          +" data-group="+groupId+" data-discussion="+discussions[i].id+">"+discussions[i].name+"</a>");
+      $(".addTabs").append(updateTabs);
+    }
+  })
+
+  var noDiscussionTab = $("<li>");
+  noDiscussionTab.addClass("tab no-discussion");
+  noDiscussionTab.attr("group-id", groupId);
+  noDiscussionTab.append("<a href=#newDiscussion><i class='tiny material-icons'>add</i></a>");
+  $(".addTabs").append(noDiscussionTab);
+
+  var createNewChat = $("<div>");
+  createNewChat.attr("id", "newDiscussion");
+  createNewChat.addClass("col s12 populate-chat");
+  createNewChat.append("<p> Create a New Discussion Here </p><form><div class='input-field'>"+
+      "<i class='material-icons prefix'>chat</i><input id='icon_prefix' type='text' class='validate userInp4' placeholder='Discussion Name'>"+
+      "<a href='#!' class='waves-effect waves-light btn' id='add-created-discussion'>Create</a></div></form>");
+  $(".addChats").append(createNewChat);
+
+  addNewDiscussion(groupId);
+});
+
+// On-click event for new discussion creation in tabs section --> not initial load
+$(document).on("click", ".no-discussion", function(){
+  $(".populate-chat").remove();
+  $(".chat-title").empty();
+  var groupId = $(this).attr("group-id");
+
+  var createNewChat = $("<div>");
+  createNewChat.attr("id", "newDiscussion");
+  createNewChat.addClass("col s12 populate-chat");
+  createNewChat.append("<p> Create a New Discussion Here </p><form><div class='input-field'>"+
+      "<i class='material-icons prefix'>chat</i><input id='icon_prefix' type='text' class='validate userInp4' placeholder='Discussion Name'>"+
+      "<a href='#!' class='waves-effect waves-light btn' id='add-created-discussion'>Create</a></div></form>");
+  $(".addChats").append(createNewChat);
+
+  addNewDiscussion(groupId);
+});
+
+// On-click event to add chat-title to Discussion section
+$(document).on("click", ".disc-btn", function(){
+  $(".chat-title").empty();
+  var groupId = $(this).attr("data-group");
+  var discussionId = $(this).attr("data-discussion");
+
+  $.get("/api/groups/"+groupId+"/discussions/"+discussionId, function(oneDiscussion){
+      $(".chat-title").append("<h5>"+oneDiscussion[0].name+"</h5>");
+  })
+});
+
+// On-click event that creates a new discussion
+function addNewDiscussion(groupId){
+  $('#add-created-discussion').off("click");
+  $('#add-created-discussion').on("click", function () {
+    if ($(".userInp4").val() !== ""){
+      var nameInput = $('.userInp4').val().trim();
+      var queryUrl = "api/groups/" + groupId + "/discussions";
+      console.log(queryUrl);
+
+      $.post(queryUrl, { name: nameInput }, function (data) {
+        $(".addTabs").append("<li class='tab'><a class='disc-btn' href=#chat-"+data.id+" data-key=chat"+data.id
+            +" data-group="+groupId+" data-discussion="+data.id+">"+data.name+"</a></li>");
+        $('.userInp4').val("");
+      }); 
+    }
+  });    
+}
+
+// General functions for Materialize and display features
+$(document).ready(function() {
+  $('ul.tabs').tabs();
+  $(".showDiscussions").hide();
+});
+
 /****************** Get User's Name for chats *******************/
 function getUser(){
   $.get("/api/user", function(user){
@@ -81,7 +175,6 @@ function getUser(){
 };
 
 // Function to update discussion name
-// Add breadcrumbs for Groups > Discussion (http://materializecss.com/breadcrumbs.html)
 function updateDiscussion(){
   var groupId = "";
   var discussionId = "";

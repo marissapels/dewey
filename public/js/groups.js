@@ -1,9 +1,7 @@
 $(document).ready(function () {
 
     $('.modal').modal();
-    $('ul.tabs').tabs();
     $('.collapsible').collapsible();
-    $(".showDiscussions").hide();
     var usersGroups;
 
     getGroups();
@@ -56,72 +54,6 @@ $(document).ready(function () {
             $('.collapsible').collapsible();
         })
     });
-
-    // On-click event to show Disussions Panel and populate tabs --> Initial load.
-    $(document).on("click", ".groupDiscBtn", function(){
-        $(".addTabs").empty();
-        $(".populate-chat").remove();
-        var groupId = $(this).attr("group-id");
-        $(".showDiscussions").show();
-
-        $.get("/api/groups/"+groupId+"/discussions", function(discussions){
-            for (var i=0; i<discussions.length; i++){
-                var updateTabs = $("<li>");
-                updateTabs.addClass("tab");
-                updateTabs.append("<a class='disc-btn' href=#chat-"+discussions[i].id+" data-key=chat"+discussions[i].id+">"+discussions[i].name+"</a>");
-                $(".addTabs").append(updateTabs);
-            }
-        })
-
-        var noDiscussionTab = $("<li>");
-        noDiscussionTab.addClass("tab no-discussion");
-        noDiscussionTab.attr("group-id", groupId);
-        noDiscussionTab.append("<a href=#newDiscussion><i class='tiny material-icons'>add</i></a>");
-        $(".addTabs").append(noDiscussionTab);
-
-        var createNewChat = $("<div>");
-        createNewChat.attr("id", "newDiscussion");
-        createNewChat.addClass("col s12 populate-chat");
-        createNewChat.append("<p> Create a New Discussion Here </p><form><div class='input-field'>"+
-            "<i class='material-icons prefix'>chat</i><input id='icon_prefix' type='text' class='validate userInp4' placeholder='Discussion Name'>"+
-            "<a href='#!' class='waves-effect waves-light btn' id='add-created-discussion'>Create</a></div></form>");
-        $(".addChats").append(createNewChat);
-
-        addNewDiscussion(groupId);
-    });
-
-    // On-click event for new discussion creation in tabs section --> not initial load
-    $(document).on("click", ".no-discussion", function(){
-        $(".populate-chat").remove();
-        var groupId = $(this).attr("group-id");
-
-        var createNewChat = $("<div>");
-        createNewChat.attr("id", "newDiscussion");
-        createNewChat.addClass("col s12 populate-chat");
-        createNewChat.append("<p> Create a New Discussion Here </p><form><div class='input-field'>"+
-            "<i class='material-icons prefix'>chat</i><input id='icon_prefix' type='text' class='validate userInp4' placeholder='Discussion Name'>"+
-            "<a href='#!' class='waves-effect waves-light btn' id='add-created-discussion'>Create</a></div></form>");
-        $(".addChats").append(createNewChat);
-
-        addNewDiscussion(groupId);
-    });
-
-    // On-click event that creates a new discussion
-    function addNewDiscussion(groupId){
-        $('#add-created-discussion').off("click");
-        $('#add-created-discussion').on("click", function () {
-            if ($(".userInp4").val() !== ""){
-                var nameInput = $('.userInp4').val().trim();
-                var queryUrl = "api/groups/" + groupId + "/discussions";
-                console.log(queryUrl);
-
-                $.post(queryUrl, { name: nameInput }, function (data) {
-                    $(".addTabs").append("<li class='tab'><a class='disc-btn' href=#chat-"+data.id+" data-key=chat"+data.id+">"+data.name+"</a></li>");
-                    $('.userInp4').val("");
-                }); 
-            }
-        });    
-    }
 
     var allGroupData;
     var allGroups = {};

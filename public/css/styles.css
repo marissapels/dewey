@@ -239,9 +239,16 @@ div.card.medium{
 
 .chatMessages {
   text-align: left;
-  margin: 4px;
+  margin: 0px;
 }
 
 .userInp4{
   width: 60%;
+}
+
+.addChats {
+  font-family: 'Open Sans', sans-serif;
+}
+.chat-name {
+  font-family: 'Archivo Black', sans-serif;
 }

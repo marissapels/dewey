@@ -33,6 +33,19 @@ module.exports = function(app){
 			});
 	})
 
+  // Get a specific discussion from a group
+	app.get("/api/groups/:group/discussions/:discussion", function(req, res){
+		db.Group.findById(req.params.group)
+			.then(function(group){
+				group.getDiscussions({where: {
+					id: req.params.discussion
+				}})
+					.then(function(oneDiscussion){
+						res.json(oneDiscussion)
+					})
+			});
+	})
+
   // Update discussion name
   app.put("/api/groups/:group/discussions/:discussion", function(req, res){
     db.Discussion.update(

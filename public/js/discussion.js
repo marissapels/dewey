@@ -18,24 +18,21 @@ var chatName, username;
 $(document).on("click", ".disc-btn", function(){
   $(".addChats").empty();
   getUser();
-  // Variables to store information for Firebase
+  // Create chat directories with unique names in Firebase
   chatName = $(this).attr("data-key");
-  console.log(chatName)
-  // Create chat directories with unique names
   var chatData = database.ref("/chat/" + chatName);
 
   // Clears previous chat messages when appending
+  // Render message to page. Update chat on screen when new message detected - ordered by 'time' value
   $(".chat-messages").html("");
   chatData.orderByChild("time").off("child_added");
-
-  // Render message to page. Update chat on screen when new message detected - ordered by 'time' value
   chatData.orderByChild("time").on("child_added", function(snapshot) {
     // $(".chat-messages").append("<p class=chatMessages><span>"+ snapshot.val().name + "</span>: " + snapshot.val().message + "</p>");
     if (snapshot.val().name === username) {
       $(".chat-messages").append("<p class=chatMessages style='text-align:right;'>" + snapshot.val().message + "</p><p class=chatMessages style='font-size:.5em;text-align:right;margin-bottom:5px'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p>");
     }
     else {
-      $(".chat-messages").append("<p class='chatMessages chat-name'>" +snapshot.val().name +"</p><p class=chatMessages>"+ snapshot.val().message + "</p><p class=chatMessages style='font-size:.5em;margin-bottom:12px;'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p>");
+      $(".chat-messages").append("<div class=chatMessages><span class='chat-name'>" +snapshot.val().name +": </span><span class=chatMessages>"+ snapshot.val().message + "</span><p class=chatMessages style='font-size:.5em;margin-bottom:12px;'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p></div>");
     }
     $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight); 
   });
@@ -77,7 +74,6 @@ $(document).on("click", ".disc-btn", function(){
     }
   });
 })
-
 
 // On-click event to show Disussions Panel and populate tabs --> Initial load.
 $(document).on("click", ".groupDiscBtn", function(){
@@ -131,18 +127,43 @@ $(document).on("click", ".no-discussion", function(){
   addNewDiscussion(groupId);
 });
 
-// On-click event to add chat-title to Discussion section
+/****************** Chat Title - Edit and Update Functions *******************/
 $(document).on("click", ".disc-btn", function(){
   $(".chat-title").empty();
   var groupId = $(this).attr("data-group");
   var discussionId = $(this).attr("data-discussion");
-
   $.get("/api/groups/"+groupId+"/discussions/"+discussionId, function(oneDiscussion){
-      $(".chat-title").append("<h5>"+oneDiscussion[0].name+"</h5>");
+      $(".chat-title").append("<div><h5 class='chatNameTitle'>"+oneDiscussion[0].name+"</h5><a class='btn-flat editChat' data-group="+groupId
+        +" data-discussion="+discussionId+">Edit</a><a class='btn-flat deleteChat'>Delete</a></div>");
   })
+})
+
+$(document).on("click",".editChat", function(){
+  var groupId = $(this).attr("data-group");
+  var discussionId = $(this).attr("data-discussion");
+  $(".chatNameTitle").replaceWith("<input type='text' class='editChatName' placeholder='Enter New Name'>");
+  $(".editChat").replaceWith("<a class='btn-flat updateChatName' data-group="+groupId+" data-discussion="+discussionId+">Update</a>");
 });
 
-// On-click event that creates a new discussion
+$(document).on("click", ".updateChatName", function(){
+  var newChatName = $(".editChatName").val().trim();
+  var groupId = $(this).attr("data-group");
+  var discussionId = $(this).attr("data-discussion");
+  $(".chat-title").html("<div><h5 class='chatNameTitle'>"+newChatName+"</h5><a class='btn-flat editChat' data-group="+groupId
+    +" data-discussion="+discussionId+">Edit</a><a class='btn-flat deleteChat'>Delete</a></div>");
+  updateDiscussion(groupId, discussionId, newChatName);
+})
+
+
+/****************** FUNCTIONS *******************/
+function getUser(){
+  $.get("/api/user", function(user){
+    username = user[0].name;
+    // console.log("Username is " + username);
+  });
+};
+
+// Function to create a new discussion in database
 function addNewDiscussion(groupId){
   $('#add-created-discussion').off("click");
   $('#add-created-discussion').on("click", function () {
@@ -160,22 +181,51 @@ function addNewDiscussion(groupId){
   });    
 }
 
+// Function to update discussion name
+function updateDiscussion(groupId, discussionId, newChatName){
+  var chatInfo = {
+    name: newChatName,
+  };
+  $.ajax({
+      method: "PUT",
+      url: "/api/groups/"+groupId+"/discussions/"+discussionId,
+      data: chatInfo
+    })
+    .done(function(){
+      $(".addTabs").empty();
+      $.get("/api/groups/"+groupId+"/discussions", function(discussions){
+        for (var i=0; i<discussions.length; i++){
+          var updateTabs = $("<li>");
+          updateTabs.addClass("tab");
+          updateTabs.append("<a class='disc-btn' href=#chat-"+discussions[i].id+" data-key=chat"+discussions[i].id
+              +" data-group="+groupId+" data-discussion="+discussions[i].id+">"+discussions[i].name+"</a>");
+          $(".addTabs").append(updateTabs);
+        }
+      });
+      var noDiscussionTab = $("<li>");
+      noDiscussionTab.addClass("tab no-discussion");
+      noDiscussionTab.attr("group-id", groupId);
+      noDiscussionTab.append("<a href=#newDiscussion><i class='tiny material-icons'>add</i></a>");
+      $(".addTabs").append(noDiscussionTab);
+    });
+};
+
 // General functions for Materialize and display features
 $(document).ready(function() {
   $('ul.tabs').tabs();
   $(".showDiscussions").hide();
 });
 
-/****************** Get User's Name for chats *******************/
-function getUser(){
-  $.get("/api/user", function(user){
-    username = user[0].name;
-    console.log("Username is " + username);
-  });
-};
 
-// Function to update discussion name
-function updateDiscussion(){
-  var groupId = "";
-  var discussionId = "";
-}
+      // var dropdownMenu = $("<ul>");
+      // dropdownMenu.addClass("dropdown-content");
+      // dropdownMenu.attr("id", "dropdown1")
+      // dropdownMenu.append("<li><a href='#!'>one</a></li><li><a href='#!'>two</a></li>"+
+      //   "<li class='divider'></li><li><a href='#!'>three</a></li><li><a href='#!'><i class='material-icons'>view_module</i>four</a></li>"+
+      //   "<li><a href='#!'><i class='material-icons'>cloud</i>five</a></li>");
+
+      // $(".addDiscussion").append("<a class='dropdown-button right' data-beloworigin='true' href='#' "+
+      // "data-activates='dropdown1'><i class='material-icons'>more_vert</i>EDIT</a>")
+      // $("#dropDown").append("<a class='dropdown-button btn' data-beloworigin='true' data-activates='dropdown1'>Drop Me!</a>");
+      // $("#dropDown").append("<ul id='dropdown1' class='dropdown-content'><li><a href='#!'>one</a></li><li><a href='#!'>two</a></li><li class='divider'></li>"+"<li><a href'#!'>three</a></li><li><a href='#!'><i class='material-icons'>view_module</i>four</a></li><li><a href='#!'><i class='material-icons'>cloud</i>five</a></li></ul>");
+      // $(".addDiscussion").append(dropdownMenu);

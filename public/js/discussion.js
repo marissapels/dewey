@@ -29,10 +29,14 @@ $(document).on("click", ".disc-btn", function(){
   chatData.orderByChild("time").on("child_added", function(snapshot) {
     // $(".chat-messages").append("<p class=chatMessages><span>"+ snapshot.val().name + "</span>: " + snapshot.val().message + "</p>");
     if (snapshot.val().name === username) {
-      $(".chat-messages").append("<p class=chatMessages style='text-align:right;'>" + snapshot.val().message + "</p><p class=chatMessages style='font-size:.5em;text-align:right;margin-bottom:5px'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p>");
+      $(".chat-messages").append("<p class=chatMessages style='text-align:right;'>" + snapshot.val().message + 
+        "</p><p class=chatMessages style='font-size:.5em;text-align:right;margin-bottom:5px'>"+
+        moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm a")+"</p>");
     }
     else {
-      $(".chat-messages").append("<div class=chatMessages><span class='chat-name'>" +snapshot.val().name +": </span><span class=chatMessages>"+ snapshot.val().message + "</span><p class=chatMessages style='font-size:.5em;margin-bottom:12px;'>"+moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm:ss a")+"</p></div>");
+      $(".chat-messages").append("<div class=chatMessages><span class='chat-name'>" +snapshot.val().name +
+        ": </span><span class=chatMessages>"+ snapshot.val().message + "</span><p class=chatMessages style='font-size:.5em;margin-bottom:12px;'>"+
+        moment(snapshot.val().time).format("dddd, MMMM Do YYYY, h:mm a")+"</p></div>");
     }
     $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight); 
   });
@@ -40,8 +44,8 @@ $(document).on("click", ".disc-btn", function(){
   var populateChats = $("<div>");
   populateChats.addClass("col s12 populate-chat");
   populateChats.attr("id", "chat-"+chatName);
-  populateChats.append("<div class='chat-messages'></div><div class='modal-footer'><input type='text' class='chat-input' placeholder='Add to the conversation!'>"+
-      "<a class='modal-action btn-flat chat-send'>Send</a></div>");
+  populateChats.append("<div class='chat-messages'></div><div class='modal-footer'><input type='text' class='chat-input' "+
+    "placeholder='Add to the conversation!'><a class='modal-action btn-flat chat-send'>Send</a></div>");
   $(".addChats").append(populateChats);
 
   // Unbind chat when clicked off of modal. Prevent multiple messages.
@@ -127,39 +131,85 @@ $(document).on("click", ".no-discussion", function(){
   addNewDiscussion(groupId);
 });
 
-/****************** Chat Title - Edit and Update Functions *******************/
+/****************** Chat click events - Edit Update Delete *******************/
 $(document).on("click", ".disc-btn", function(){
   $(".chat-title").empty();
   var groupId = $(this).attr("data-group");
   var discussionId = $(this).attr("data-discussion");
+  var dataKey = $(this).attr("data-key");
   $.get("/api/groups/"+groupId+"/discussions/"+discussionId, function(oneDiscussion){
-      $(".chat-title").append("<div><h5 class='chatNameTitle'>"+oneDiscussion[0].name+"</h5><a class='btn-flat editChat' data-group="+groupId
-        +" data-discussion="+discussionId+">Edit</a><a class='btn-flat deleteChat'>Delete</a></div>");
-  })
-})
+      $(".chat-title").append("<li><div class='collapsible-header chatNameTitle'>"+oneDiscussion[0].name+
+        "<span><a><i class='material-icons right'>more_vert</i></a></span></div><div class=collapsible-body><a class='btn-flat editChat' data-group="+
+        groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Edit</a><a class='btn-flat deleteChat' data-group="+
+        groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Delete</a></div></li>");
+  });
+});
 
 $(document).on("click",".editChat", function(){
   var groupId = $(this).attr("data-group");
   var discussionId = $(this).attr("data-discussion");
+  var dataKey = $(this).attr("data-key");
   $(".chatNameTitle").replaceWith("<input type='text' class='editChatName' placeholder='Enter New Name'>");
-  $(".editChat").replaceWith("<a class='btn-flat updateChatName' data-group="+groupId+" data-discussion="+discussionId+">Update</a>");
+  $(".editChat").replaceWith("<a class='btn-flat updateChatName' data-group="+groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Update</a>");
+  $(".deleteChat").replaceWith("<a class='btn-flat chatCancel' data-group="+groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Cancel</a>")
 });
 
 $(document).on("click", ".updateChatName", function(){
-  var newChatName = $(".editChatName").val().trim();
+  if ($(".editChatName").val() !== ""){
+    var newChatName = $(".editChatName").val().trim();
+    var groupId = $(this).attr("data-group");
+    var discussionId = $(this).attr("data-discussion");
+    var dataKey = $(this).attr("data-key");
+    $(".chat-title").html("<li><div class='collapsible-header chatNameTitle'>"+newChatName+
+      "</div><div class=collapsible-body><a class='btn-flat editChat' data-group="+groupId+
+      " data-discussion="+discussionId+" data-key="+dataKey+">Edit</a><a class='btn-flat deleteChat' data-group="+groupId+
+      " data-discussion="+discussionId+" data-key="+dataKey+">Delete</a></div></li>");
+    updateDiscussion(groupId, discussionId, newChatName);
+  };
+});
+
+$(document).on("click", ".chatCancel", function(){
+  $(".chat-title").empty();
   var groupId = $(this).attr("data-group");
   var discussionId = $(this).attr("data-discussion");
-  $(".chat-title").html("<div><h5 class='chatNameTitle'>"+newChatName+"</h5><a class='btn-flat editChat' data-group="+groupId
-    +" data-discussion="+discussionId+">Edit</a><a class='btn-flat deleteChat'>Delete</a></div>");
-  updateDiscussion(groupId, discussionId, newChatName);
-})
+  var dataKey = $(this).attr("data-key");
+  $.get("/api/groups/"+groupId+"/discussions/"+discussionId, function(oneDiscussion){
+      $(".chat-title").append("<li><div class='collapsible-header chatNameTitle'>"+oneDiscussion[0].name+
+        "<span><a><i class='material-icons right'>more_vert</i></a></span></div><div class=collapsible-body><a class='btn-flat editChat' data-group="+
+        groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Edit</a><a class='btn-flat deleteChat' data-group="+
+        groupId+" data-discussion="+discussionId+" data-key="+dataKey+">Delete</a></div></li>");
+  });
+});
 
+$(document).on("click", ".deleteChat", function(){
+  var groupId = $(this).attr("data-group");
+  var discussionId = $(this).attr("data-discussion");
+  var dataKey = $(this).attr("data-key");
+
+  swal({
+    title: 'Are you sure?',
+    text: "You won't be able to get this chat back!",
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  }).then(function () {
+    deleteDiscussion(groupId, discussionId);
+    database.ref("/chat").child(dataKey).remove();
+
+    swal(
+      'Deleted!',
+      'Your chat has been deleted.',
+      'success'
+    )
+  })
+});
 
 /****************** FUNCTIONS *******************/
 function getUser(){
   $.get("/api/user", function(user){
     username = user[0].name;
-    // console.log("Username is " + username);
   });
 };
 
@@ -190,8 +240,7 @@ function updateDiscussion(groupId, discussionId, newChatName){
       method: "PUT",
       url: "/api/groups/"+groupId+"/discussions/"+discussionId,
       data: chatInfo
-    })
-    .done(function(){
+    }).done(function(){
       $(".addTabs").empty();
       $.get("/api/groups/"+groupId+"/discussions", function(discussions){
         for (var i=0; i<discussions.length; i++){
@@ -210,22 +259,35 @@ function updateDiscussion(groupId, discussionId, newChatName){
     });
 };
 
+// Function to delete discussion
+function deleteDiscussion(groupId, discussionId){
+  $.ajax({
+    method: "DELETE",
+    url: "/api/groups/"+groupId+"/discussions/"+discussionId
+  }).done(function(){
+    $(".addTabs").empty();
+    $(".chat-title").empty();
+    $(".populate-chat").remove();
+    $.get("/api/groups/"+groupId+"/discussions", function(discussions){
+      for (var i=0; i<discussions.length; i++){
+        var updateTabs = $("<li>");
+        updateTabs.addClass("tab");
+        updateTabs.append("<a class='disc-btn' href=#chat-"+discussions[i].id+" data-key=chat"+discussions[i].id
+            +" data-group="+groupId+" data-discussion="+discussions[i].id+">"+discussions[i].name+"</a>");
+        $(".addTabs").append(updateTabs);
+      }
+    });
+    var noDiscussionTab = $("<li>");
+    noDiscussionTab.addClass("tab no-discussion");
+    noDiscussionTab.attr("group-id", groupId);
+    noDiscussionTab.append("<a href=#newDiscussion><i class='tiny material-icons'>add</i></a>");
+    $(".addTabs").append(noDiscussionTab);
+  });
+}
+
 // General functions for Materialize and display features
 $(document).ready(function() {
   $('ul.tabs').tabs();
   $(".showDiscussions").hide();
+  $('.collapsible').collapsible();
 });
-
-
-      // var dropdownMenu = $("<ul>");
-      // dropdownMenu.addClass("dropdown-content");
-      // dropdownMenu.attr("id", "dropdown1")
-      // dropdownMenu.append("<li><a href='#!'>one</a></li><li><a href='#!'>two</a></li>"+
-      //   "<li class='divider'></li><li><a href='#!'>three</a></li><li><a href='#!'><i class='material-icons'>view_module</i>four</a></li>"+
-      //   "<li><a href='#!'><i class='material-icons'>cloud</i>five</a></li>");
-
-      // $(".addDiscussion").append("<a class='dropdown-button right' data-beloworigin='true' href='#' "+
-      // "data-activates='dropdown1'><i class='material-icons'>more_vert</i>EDIT</a>")
-      // $("#dropDown").append("<a class='dropdown-button btn' data-beloworigin='true' data-activates='dropdown1'>Drop Me!</a>");
-      // $("#dropDown").append("<ul id='dropdown1' class='dropdown-content'><li><a href='#!'>one</a></li><li><a href='#!'>two</a></li><li class='divider'></li>"+"<li><a href'#!'>three</a></li><li><a href='#!'><i class='material-icons'>view_module</i>four</a></li><li><a href='#!'><i class='material-icons'>cloud</i>five</a></li></ul>");
-      // $(".addDiscussion").append(dropdownMenu);

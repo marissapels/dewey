@@ -65,7 +65,7 @@ module.exports = function(app){
 	app.delete("/api/groups/:group/discussions/:discussion", function(req, res){
 		db.Discussion.destroy({
       where: {
-        id: req.params.id
+        id: req.params.discussion
       }
 		}).then(function(results){
 			res.json(results);

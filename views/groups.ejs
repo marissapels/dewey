@@ -7,10 +7,13 @@
     <!-- Latest compiled and minified CSS & JS -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.css">
-    <link href="https://fonts.googleapis.com/css?family=McLaren|Raleway|Grand+Hotel" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=McLaren|Raleway|Grand+Hotel|Open+Sans|Archivo+Black" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
 </head>
 
 <body class="library">
@@ -39,7 +42,7 @@
 
                     <div>
                         <!-- <table id="groupList"></table> -->
-                        <ul class="collapsible popout" data-collapsible="accordion" id="groupList">
+                        <ul class="collapsible" data-collapsible="accordion" id="groupList">
                         </ul>
                     </div>
 
@@ -49,15 +52,15 @@
             <!-- Generate Discussions here and ability to open individual chats-->
             <div class="col s5">
                 <div class="discussions">
-                   <h2><%= user.name %>'s Discussions</h2> 
                    <div class="row showDiscussions">
-                    <div class="col s12 addDiscussion">
+                    <div class="col s12 addDiscussion">                 
                       <ul class="tabs addTabs">
                         <li class="tab no-discussion"><a class="active disc-btn" href="#newDiscussion"><i class="tiny material-icons">add</i></a></li>
                       </ul>
+                      <ul class="collapsible chat-title" data-collapsible="accordian">
+                      </ul>
                       <div class="addChats"></div>
                     </div>
-
                     </div>
                 </div>
             </div>

@@ -239,9 +239,61 @@ div.card.medium{
 
 .chatMessages {
   text-align: left;
-  margin: 4px;
+  margin: 0px;
 }
 
 .userInp4{
   width: 60%;
+}
+
+.addChats {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.chat-name {
+  font-family: 'Archivo Black', sans-serif;
+}
+
+.tabs .tab a.active {
+  background: #f3989b;
+  color: white;
+}
+
+.chat-title {
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.deleteChat {
+  background: #ef5350;
+  color: white;
+}
+
+.editChat {
+  background: #42a5f5;
+  color: white;
+  margin-right: 15px;
+}
+
+.chatCancel {
+  background: #ffa726;
+  color: white;
+}
+
+.updateChatName {
+  background: #26a69a;
+  color: white;
+  margin-right: 15px;
+}
+
+.collapsible-body {
+  padding: 0;
+}
+
+div.collapsible-header.chatNameTitle {
+  padding-right: 0;
+}
+
+.collapsible-header i {
+  margin: 0;
 }
